@@ -35,6 +35,14 @@
 //             this.classList.add('active');
 //         };
 //     });
+let language = 'en';
+
+const startBody = `<div class="container">
+    <h1> Virtual keyboard</h1>
+<span>created in linux</span>
+<span>switch language: left ctrl+alt</span>
+<textarea class="use-keyboard-input" autofocus></textarea>
+</div>`;
 
 const addKeyCode = (keys) => {
     const keyCode = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Delete', 'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight', 'ControlLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight'];
@@ -46,8 +54,35 @@ const addKeyCode = (keys) => {
     return keys;
 };
 
+const addEventsOnBody = (body) => {
+    // const keyboard = body.querySelector('.keyboard');
+    // console.log(keyboard);
+    body.addEventListener('keydown', (e) => {
+        const el = document.body.querySelector(`#${e.code}`);
+        if (e.code === 'Tab') {
+            e.preventDefault();
+        } else if (e.code === 'ControlLeft') {
+            body.addEventListener('keydown', (event) => {
+                if (event.code === 'AltLeft') {
+                    language === 'en' ? language = 'ru' : language = 'en';
+                    switchLanguage(language);
+                }
+            });
+        }
+
+        el.classList.add('active');
+    });
+
+    body.addEventListener('keyup', (e) => {
+        const el = document.body.querySelector(`#${e.code}`);
+        setTimeout(el.classList.remove('active'), 400);
+    });
+};
+
 function createKeys(keyLayout) {
     // console.log(keyLayout)
+    const body = document.querySelector('body');
+    body.innerHTML = startBody;
     const keyboard = document.createElement('div');
     keyboard.classList.add('keyboard');
     keyLayout.forEach((key) => {
@@ -65,14 +100,9 @@ function createKeys(keyLayout) {
     });
 
     addKeyCode(keyboard);
-    // keyboard.addEventListener('keydown', (e) => {
-    //     //console.log(keyboard.querySelector(`#${e.code}`));
-    //     console.log('hi');
-    // keyboard.querySelector(`${e.code}`)
-    //     .classList.add('active');
-    //})
-    //console.log(keyboard);
-    return keyboard;
+    body.append(keyboard);
+    addEventsOnBody(body);
+    return body;
 }
 
 const switchLanguage = (language) => {
@@ -82,21 +112,13 @@ const switchLanguage = (language) => {
         'shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '&uarr;', 'Shift', 'ctrl', 'alt', 'space', 'alt', 'ctrl', '&larr;', '&darr;', '&rarr;'];
     const keysRu = [
         '~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
-        'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'del', 'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
+        'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
         'shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '&uarr;', 'Shift', 'ctrl', 'alt', 'space', 'alt', 'ctrl', '&larr;', '&darr;', '&rarr;'];
     const res = language === 'en' ? createKeys(keysEn) : createKeys(keysRu);
     return res;
 };
 
 // class Keys {
-//     static languages = {
-//         en: ['~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
-//             'tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'enter',
-//             'shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '&uarr;', 'Shift', 'ctrl', 'win', 'alt', 'space', 'alt', 'ctrl', '&larr;', '&darr;', '&rarr;'],
-//         ru: ['~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace',
-//             'tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'enter',
-//             'shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '&uarr;', 'Shift', 'ctrl', 'win', 'alt', 'space', 'alt', 'ctrl', '&larr;', '&darr;', '&rarr;'],
-//     };
 
 //     constructor(language) {
 //         this.language = language;
@@ -106,7 +128,7 @@ const switchLanguage = (language) => {
 //     createKeyboard() {
 //         const keyboard = document.createElement('div');
 //         keyboard.classList.add('keyboard');
-//         // const keys = this.language !== 'en' ? createKeys(this.languages.en) : createKeys(this.languages.ru);
+//
 //         const keys = createKeys(this.languages.en);
 //         return keyboard.append(keys);
 //     }
@@ -115,24 +137,22 @@ const switchLanguage = (language) => {
 window.addEventListener('DOMContentLoaded', () => {
     // const y = new Keys('en');
     // document.querySelector('body').append(y.createKeyboard());
-    const y = switchLanguage('t');
-    //console.log(y)
+    switchLanguage(language);
+    // console.log(y)
     // y.addEventListener('keydown', (e) =>
     //     console.log(e.code))
-    document.querySelector('body').append(y);
+    // document.querySelector('body').append(y);
 });
+console.log(language);
+// document.addEventListener('keydown', (e) => {
+//     const el = document.body.querySelector(`#${e.code}`);
+//     if (e.code === 'Tab') {
+//         e.preventDefault();
+//     }
+//     el.classList.add('active');
+// });
 
-document.addEventListener('keydown', (e) => {
-    const el = document.body.querySelector(`#${e.code}`)
-    if (e.code === 'Tab') {
-        e.preventDefault()
-    }
-    setTimeout(el.classList.add('active'), 400);
-
-})
-
-document.addEventListener('keyup', (e) => {
-    const el = document.body.querySelector(`#${e.code}`)
-    setTimeout(el.classList.remove('active'), 400);
-
-})
+// document.addEventListener('keyup', (e) => {
+//     const el = document.body.querySelector(`#${e.code}`);
+//     setTimeout(el.classList.remove('active'), 400);
+// });

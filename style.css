@@ -13,22 +13,35 @@
     margin: 20px auto 0 auto;
 }
 
-.keyboard {
-    position: fixed;
+.hidden {
+    display: none;
+}
+
+.keyboard_ru {
+    /*position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    padding: 5px 0;
+    padding: 5px 0;*/
+    text-align: center;
+    border: 2px solid black;
+    background: #004134;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    user-select: none;
+}
+
+.keyboard_en {
+    /*position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 5px 0;*/
     text-align: center;
     border: 2px solid black;
     background: #004134;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
     user-select: none;
 
-}
-
-.keyboard__keys {
-    text-align: center;
 }
 
 .keyboard__key {
@@ -51,6 +64,12 @@
     -webkit-tap-highlight-color: transparent;
     position: relative;
     transition: bottom 0.4s;
+}
+
+.keyboard__key:active {
+    background-color: rgba(14, 202, 215, 0.953);
+    border-radius: 50%;
+    transition: border-radius 0.4s, background-color 0.4s;
 }
 
 .keyboard__key.active {
